@@ -1,0 +1,2 @@
+# chintu
+ The Voice Assistant is a Python-based application that utilizes speech recognition and text-to-speech technologies to interact with users through voice commands. It can perform various tasks such as searching Wikipedia, opening websites, playing music, telling the current time, and responding to user queries. The assistant is designed to enhance user interaction through voice commands, making it more accessible and convenient.
