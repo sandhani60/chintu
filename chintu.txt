@@ -1,0 +1,127 @@
+import speech_recognition as sr
+import pyttsx3
+import datetime
+import wikipedia
+import webbrowser
+import os
+
+# Initialize the recognizer
+recognizer = sr.Recognizer()
+
+# Initialize the text-to-speech engine
+engine = pyttsx3.init()
+engine.setProperty('rate', 150)
+
+# Function to speak
+def speak(text):
+    engine.say(text)
+    engine.runAndWait()
+
+# Function to recognize speech
+def listen():
+    with sr.Microphone() as source:
+        print("Listening...")
+        recognizer.adjust_for_ambient_noise(source)
+        try:
+            audio = recognizer.listen(source, timeout=5)  # Timeout after 5 seconds of no speech
+            print("Recognizing...")
+            text = recognizer.recognize_google(audio)
+            print("You said:", text)
+            return text.lower()
+        except sr.UnknownValueError:
+            print("Sorry, I couldn't understand what you said.")
+            speak("Sorry, I couldn't understand what you said.")
+            return ""
+        except sr.RequestError as e:
+            print(f"Could not request results from Google Speech Recognition service; {e}")
+            speak("Sorry, there was an error with the speech recognition service.")
+            return ""
+
+# Function to greet
+def greet():
+    hour = datetime.datetime.now().hour
+    if 0 <= hour < 12:
+        speak("Good morning Sandhani! I am Chintu.")
+    elif 12 <= hour < 18:
+        speak("Good afternoon Sandhani! I am Chintu.")
+    else:
+        speak("Good evening Sandhani! I am Chintu.")
+
+# Main function
+def main():
+    greet()
+    speak("How can I assist you today?")
+    
+    while True:
+        command = listen()
+        
+        if "wikipedia" in command:
+            speak("Searching Wikipedia...")
+            query = command.replace("wikipedia", "").strip()
+            if query:
+                try:
+                    result = wikipedia.summary(query, sentences=2)
+                    speak("According to Wikipedia")
+                    speak(result)
+                except Exception as e:
+                    print(f"Error retrieving Wikipedia summary: {e}")
+                    speak("Sorry, I couldn't find any information on that.")
+            else:
+                speak("What would you like to search for on Wikipedia?")
+                
+        elif "open youtube" in command:
+            webbrowser.open("https://www.youtube.com/")
+        
+        elif "open google" in command:
+            webbrowser.open("https://www.google.com/")
+        
+        elif "mahesh babu" in command:
+            webbrowser.open("https://youtu.be/gh3FyLT7WVg?si=xHnn2_72n-OsXrlm")
+        
+        elif "play music" in command:
+            music_dir = "C:\\Music"  # Change this directory to your music directory
+            try:
+                songs = os.listdir(music_dir)
+                if songs:
+                    os.startfile(os.path.join(music_dir, songs[0]))
+                else:
+                    speak("No songs found in the music directory.")
+            except Exception as e:
+                print(f"Error playing music: {e}")
+                speak("Sorry, I couldn't play music.")
+        
+        elif "time" in command:
+            str_time = datetime.datetime.now().strftime("%H:%M:%S")
+            speak(f"The time is {str_time}")
+        
+        elif "breakfast" in command:
+            speak("Not yet.")
+        
+        elif "how are you" in command:
+            speak("I am not good, Sandhani. You seem to have forgotten me.")
+        
+        elif "exit" in command:
+            speak("Goodbye!")
+            break
+        
+        elif "song" in command:
+            speak("Sure, which song would you like to play?")
+            song_query = listen()
+            if song_query:
+                search_url = f"https://www.youtube.com/results?search_query={song_query.replace(' ', '+')}"
+                webbrowser.open(search_url)
+                speak(f"Here are the search results for {song_query}.")
+        
+        elif "play a movie on youtube" in command:
+            speak("Sure, which movie would you like to play?")
+            movie_query = listen()
+            if movie_query:
+                search_url = f"https://www.youtube.com/results?search_query={movie_query.replace(' ', '+')}"
+                webbrowser.open(search_url)
+                speak(f"Here are the search results for {movie_query}.")
+        
+        else:
+            speak("I'm sorry, I don't understand that command.")
+
+if __name__ == "__main__":
+    main()
