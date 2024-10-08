@@ -47,5 +47,5 @@ If you'd like to contribute to the Voice Assistant project, feel free to fork th
 Contact
 For any queries or suggestions, feel free to reach out:
 
-Email: your.email@example.com
-GitHub: yourusername
+Email: sandhani82@gmail.com
+GitHub: sandhani60
